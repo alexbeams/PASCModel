@@ -82,7 +82,7 @@ getout <- function(tau,eta,epsilon,Q,I_active,gamma=1,delta=1/52,alpha=1/52,s=0.
 		})
 	}
 
-	#calibrate phi for the chosen value of eta, along with the background values of VE and fr
+	#calibrate phi for the chosen value of eta, along with the background values of VE and fr (Q)
 
 	getPhi <- function(eta){
 		Phi =  Q * (getS(eta)+(1-eta)*getP(eta))/(getS(eta) + (1-VE)*getP(eta))
@@ -504,48 +504,79 @@ getuplot2 <- function(outlist,ylims,mainlab,axno=T,col='gray',axesvar=F){
 		unew = unew
 		xnew = outnew$time
 
-		polygon(c(xold, rev(xnew)), c(uold, rev(unew)), col=grays[i],border=grays[i])
+		polygon(c(xold, rev(xnew)), c(uold, rev(unew)), col=grays[i],border=NA )#grays[i])
 
 		uold=unew
 		xold=xnew
 	}
 
-	lines(uold~xold,lwd=1)
+	#lines(uold~xold,lwd=1)
 }
 
+getleggrad <- function(xleftdiff,xrightdiff,ytopdiff,ybottomdiff){
 
+	# Gradient parameters for legend
+	n <- 100  # Number of gradient steps
+	eta_values <- seq(0, 0.55, length.out = n)
+	colors <- gray(seq(0, 1, length.out = n))  # Gradient from white to black
+	# Positioning for the legend
+	xleft <- par("usr")[1]+xleftdiff  # Left boundary of the plot
+	xright <- xleft + xrightdiff  # Width of the legend
+	ytop <- par("usr")[4]+ytopdiff  # Top boundary of the plot
+	ybottom <- ytop +ybottomdiff  # Height of the legend
+
+	# Draw the gradient
+	for (i in 1:n) {
+	  rect(xleft = xleft, ybottom = ybottom + (i-1)*(ytop-ybottom)/n, 
+	       xright = xright, ytop = ybottom + i*(ytop-ybottom)/n, 
+	       col = colors[i], border = NA)
+	}
+
+
+}
 # generate the figures:
 
 getfig3 <- function(save=F){
-	if(save==T){jpeg(file='pasc_preds_exp.jpeg', width = 2880, height = 960,
-	     pointsize = 36, quality = 100, bg = "white")
+	if(save==T){jpeg(file='pasc_preds_exp.jpeg', width = 14, height = 4,
+	     units='in', res = 800)
 	}
 
 	par(mfrow=c(1,3))
 	getuplot2(outlist.ve,c(0,0.1),bquote('Outcomes for '~VE==0.55),col='black')
-	text(x=150,y=0.025,bquote(epsilon==0.55~', '~eta==0))
-	text(x=100,y=0.07,bquote(epsilon==0~', '~eta==0.55))
+	text(x=150,y=0.025,bquote(eta==0.55~', '~epsilon==0))
+	text(x=100,y=0.07,bquote(eta==0~', '~epsilon==0.55))
 	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)		
 	axis(2,at=c(.0,.025,.05,.075,.1),labels=c(.0,.025,.05,.075,.1),las=2,pos=0)
 	mtext('Time [weeks]',line=-32,outer=T)
 	mtext('PASC Prevalence',las=3,line=-1.5,side=2,outer=T)
+
+	getleggrad(20,20,-.025,-.025)
+	# Add text labels for eta values
+	text(x = par('usr')[1]+25, y = .085, labels = expression(eta == 0), adj = 0)
+	text(x = par('usr')[1]+20, y = .05, labels = expression(eta == 0.55), adj = 0)
 	
 	getuplot2(outlist.eps,c(0,0.1),bquote('Outcomes for '~epsilon==0.55),col='black')
 	text(x=150,y=0.015,bquote(eta==1~', '~VE==1))
 	text(x=100,y=0.07,bquote(eta==0~', '~VE==0.55))
 	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)		
 	axis(2,at=c(.0,.025,.05,.075,.1),labels=c(.0,.025,.05,.075,.1),las=2,pos=0)
-
+	getleggrad(20,20,-.025,-.025)
+	text(x = par('usr')[1]+25, y = .085, labels = expression(eta == 0), adj = 0)
+	text(x = par('usr')[1]+20, y = .05, labels = expression(eta == 1), adj = 0)
+	
 	getuplot2(outlist.eta,c(0,0.1),bquote('Outcomes for '~eta==0.55),col='black')
 	text(x=150,y=0.02,bquote(epsilon==1~', '~VE==1))
 	text(x=100,y=0.04,bquote(epsilon==0~', '~VE==0.55))
 	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)		
 	axis(2,at=c(.0,.025,.05,.075,.1),labels=c(.0,.025,.05,.075,.1),las=2,pos=0)
+	getleggrad(20,20,-.025,-.025)
+	text(x = par('usr')[1]+25, y = .085, labels = expression(epsilon == 0), adj = 0)
+	text(x = par('usr')[1]+20, y = .05, labels = expression(epsilon == 0.55), adj = 0)
 
 	if(save==T){dev.off()}
 
 }
-
+getfig3(save=T)
 
 getfig3a <- function(save=F){
 	if(save==T){jpeg(file='pasc_preds_exp_a.jpeg', width = 960, height = 960,
