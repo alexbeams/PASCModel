@@ -565,4 +565,85 @@ getfig3_het <- function(save=F){
 
 }
 
-	
+
+
+getleggrad <- function(xleftdiff,xrightdiff,ytopdiff,ybottomdiff){
+
+        # Gradient parameters for legend
+        n <- 100  # Number of gradient steps
+        eta_values <- seq(0, 0.55, length.out = n)
+        colors <- gray(seq(0, 1, length.out = n))  # Gradient from white to black
+        # Positioning for the legend
+        xleft <- par("usr")[1]+xleftdiff  # Left boundary of the plot
+        xright <- xleft + xrightdiff  # Width of the legend
+        ytop <- par("usr")[4]+ytopdiff  # Top boundary of the plot
+        ybottom <- ytop +ybottomdiff  # Height of the legend
+
+        # Draw the gradient
+        for (i in 1:n) {
+          rect(xleft = xleft, ybottom = ybottom + (i-1)*(ytop-ybottom)/n,
+               xright = xright, ytop = ybottom + i*(ytop-ybottom)/n,
+               col = colors[i], border = NA)
+        }
+
+
+}
+
+
+
+getfig3a <- function(save=F){
+        if(save==T){pdf(file='pasc_preds_exp_het_a.pdf', width = 5, height = 5)
+        }
+
+        getuplot2(outlist.ve,c(0,0.1),bquote('Outcomes for '~VE[T]==0.55),col='black')
+        text(x=150,y=0.027,bquote(eta==0.55~', '~epsilon==0))
+        text(x=120,y=0.07,bquote(eta==0~', '~epsilon==0.55),srt=25)
+        axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)
+        axis(2,at=c(.0,.025,.05,.075,.1),labels=c(.0,.025,.05,.075,.1),las=2,pos=0)
+        mtext('Time [weeks]',line=-28,outer=T)
+        mtext('PASC Prevalence',las=3,line=-1.5,side=2,outer=T)
+
+        getleggrad(20,20,-.025,-.025)
+        # Add text labels for eta values
+        text(x = par('usr')[1]+25, y = .085, labels = expression(eta == 0), adj = 0)
+        text(x = par('usr')[1]+20, y = .05, labels = expression(eta == 0.55), adj = 0)
+        if(save==T){dev.off()}
+}
+
+
+getfig3b <- function(save=F){
+        if(save==T){pdf(file='pasc_preds_exp_het_b.pdf', width = 5, height = 5)
+        }
+
+        par(mfrow=c(1,1))
+        getuplot2(outlist.eps,c(0,0.1),bquote('Outcomes for '~epsilon==0.55),col='black')
+        text(x=150,y=0.015,bquote(eta==1~', '~VE[T]==1))
+        text(x=110,y=0.065,bquote(eta==0~', '~VE[T]==0.55),srt=35)
+        axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)
+        axis(2,at=c(.0,.025,.05,.075,.1),labels=c(.0,.025,.05,.075,.1),las=2,pos=0)
+        mtext('Time [weeks]',line=-24,outer=T)
+        getleggrad(20,20,-.025,-.025)
+        text(x = par('usr')[1]+23, y = .085, labels = expression(eta == 0), adj = 0)
+        text(x = par('usr')[1]+23, y = .05, labels = expression(eta == 1), adj = 0)
+        if(save==T){dev.off()}
+}
+
+getfig3c <- function(save=F){
+        if(save==T){pdf(file='pasc_preds_exp_het_c.pdf', width = 5, height = 5)
+        }
+
+        par(mfrow=c(1,1))
+        getuplot2(outlist.eta,c(0,0.1),bquote('Outcomes for '~eta==0.55),col='black')
+        text(x=150,y=0.021,bquote(epsilon==1~', '~VE[T]==1))
+        text(x=100,y=0.035,bquote(epsilon==0~', '~VE[T]==0.55),srt=5)
+        axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)
+        axis(2,at=c(.0,.025,.05,.075,.1),labels=c(.0,.025,.05,.075,.1),las=2,pos=0)
+        getleggrad(20,20,-.025,-.025)
+        text(x = par('usr')[1]+25, y = .085, labels = expression(epsilon == 0), adj = 0)
+        text(x = par('usr')[1]+25, y = .05, labels = expression(epsilon == 1), adj = 0)
+
+        if(save==T){dev.off()}
+
+}
+
+
