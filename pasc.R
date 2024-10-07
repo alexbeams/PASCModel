@@ -454,7 +454,7 @@ adduplot <- function(outlist,col='gray'){
 		unew = unew
 		xnew = outnew$time
 
-		polygon(c(xold, rev(xnew)), c(uold, rev(unew)), col=grays[i],border=grays[i])
+		polygon(c(xold, rev(xnew)), c(uold, rev(unew)), col=grays[i],border=NA ) #grays[i])
 
 		uold=unew
 		xold=xnew
@@ -542,12 +542,12 @@ getfig3 <- function(save=F){
 	}
 
 	par(mfrow=c(1,3))
-	getuplot2(outlist.ve,c(0,0.1),bquote('Outcomes for '~VE==0.55),col='black')
-	text(x=150,y=0.025,bquote(eta==0.55~', '~epsilon==0))
-	text(x=100,y=0.07,bquote(eta==0~', '~epsilon==0.55))
+	getuplot2(outlist.ve,c(0,0.1),bquote('Outcomes for '~VE[T]==0.55),col='black')
+	text(x=150,y=0.028,bquote(eta==0.55~', '~epsilon==0))
+	text(x=120,y=0.07,bquote(eta==0~', '~epsilon==0.55),srt=25)
 	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)		
 	axis(2,at=c(.0,.025,.05,.075,.1),labels=c(.0,.025,.05,.075,.1),las=2,pos=0)
-	mtext('Time [weeks]',line=-32,outer=T)
+	mtext('Time [weeks]',line=-28,outer=T)
 	mtext('PASC Prevalence',las=3,line=-1.5,side=2,outer=T)
 
 	getleggrad(20,20,-.025,-.025)
@@ -556,78 +556,110 @@ getfig3 <- function(save=F){
 	text(x = par('usr')[1]+20, y = .05, labels = expression(eta == 0.55), adj = 0)
 	
 	getuplot2(outlist.eps,c(0,0.1),bquote('Outcomes for '~epsilon==0.55),col='black')
-	text(x=150,y=0.015,bquote(eta==1~', '~VE==1))
-	text(x=100,y=0.07,bquote(eta==0~', '~VE==0.55))
+	text(x=150,y=0.015,bquote(eta==1~', '~VE[T]==1))
+	text(x=110,y=0.065,bquote(eta==0~', '~VE[T]==0.55),srt=35)
 	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)		
 	axis(2,at=c(.0,.025,.05,.075,.1),labels=c(.0,.025,.05,.075,.1),las=2,pos=0)
 	getleggrad(20,20,-.025,-.025)
-	text(x = par('usr')[1]+25, y = .085, labels = expression(eta == 0), adj = 0)
-	text(x = par('usr')[1]+20, y = .05, labels = expression(eta == 1), adj = 0)
+	text(x = par('usr')[1]+23, y = .085, labels = expression(eta == 0), adj = 0)
+	text(x = par('usr')[1]+23, y = .05, labels = expression(eta == 1), adj = 0)
 	
 	getuplot2(outlist.eta,c(0,0.1),bquote('Outcomes for '~eta==0.55),col='black')
-	text(x=150,y=0.02,bquote(epsilon==1~', '~VE==1))
-	text(x=100,y=0.04,bquote(epsilon==0~', '~VE==0.55))
+	text(x=150,y=0.023,bquote(epsilon==1~', '~VE[T]==1))
+	text(x=100,y=0.035,bquote(epsilon==0~', '~VE[T]==0.55),srt=5)
 	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)		
 	axis(2,at=c(.0,.025,.05,.075,.1),labels=c(.0,.025,.05,.075,.1),las=2,pos=0)
 	getleggrad(20,20,-.025,-.025)
 	text(x = par('usr')[1]+25, y = .085, labels = expression(epsilon == 0), adj = 0)
-	text(x = par('usr')[1]+20, y = .05, labels = expression(epsilon == 0.55), adj = 0)
+	text(x = par('usr')[1]+25, y = .05, labels = expression(epsilon == 1), adj = 0)
 
 	if(save==T){dev.off()}
 
 }
-getfig3(save=T)
 
 getfig3a <- function(save=F){
-	if(save==T){jpeg(file='pasc_preds_exp_a.jpeg', width = 960, height = 960,
-	     pointsize = 36, quality = 100, bg = "white")
+	if(save==T){jpeg(file='pasc_preds_exp_a.jpeg', width = 5, height = 5, units='in', res=700)
 	}
 
-	par(mfrow=c(1,1))
-	getuplot(outlist.ve,c(0,0.1),bquote('Outcomes for '~VE==0.55))
-	text(x=150,y=0.025,bquote(epsilon==0.55~', '~eta==0))
-	text(x=100,y=0.08,bquote(epsilon==0~', '~eta==0.55))
-	if(save==T){dev.off()}
+	getuplot2(outlist.ve,c(0,0.1),bquote('Outcomes for '~VE[T]==0.55),col='black')
+	text(x=150,y=0.028,bquote(eta==0.55~', '~epsilon==0))
+	text(x=120,y=0.07,bquote(eta==0~', '~epsilon==0.55),srt=25)
+	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)		
+	axis(2,at=c(.0,.025,.05,.075,.1),labels=c(.0,.025,.05,.075,.1),las=2,pos=0)
+	mtext('Time [weeks]',line=-28,outer=T)
+	mtext('PASC Prevalence',las=3,line=-1.5,side=2,outer=T)
 
+	getleggrad(20,20,-.025,-.025)
+	# Add text labels for eta values
+	text(x = par('usr')[1]+25, y = .085, labels = expression(eta == 0), adj = 0)
+	text(x = par('usr')[1]+20, y = .05, labels = expression(eta == 0.55), adj = 0)
+	if(save==T){dev.off()}
 }
 
 
 getfig3b <- function(save=F){
-	if(save==T){jpeg(file='pasc_preds_exp_b.jpeg', width = 960, height = 960,
-	     pointsize = 36, quality = 100, bg = "white")
+	if(save==T){jpeg(file='pasc_preds_exp_b.jpeg', width = 5, height = 5, units='in', res=700)
 	}
 
 	par(mfrow=c(1,1))
-
-	getuplot(outlist.eps,c(0,0.1),bquote('Outcomes for '~epsilon==0.55))
-	text(x=150,y=0.015,bquote(eta==1~', '~VE==1))
-	text(x=100,y=0.08,bquote(eta==0~', '~VE==0.55))
+	getuplot2(outlist.eps,c(0,0.1),bquote('Outcomes for '~epsilon==0.55),col='black')
+	text(x=150,y=0.015,bquote(eta==1~', '~VE[T]==1))
+	text(x=110,y=0.065,bquote(eta==0~', '~VE[T]==0.55),srt=35)
+	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)		
+	axis(2,at=c(.0,.025,.05,.075,.1),labels=c(.0,.025,.05,.075,.1),las=2,pos=0)
+	mtext('Time [weeks]',line=-24,outer=T)
+	getleggrad(20,20,-.025,-.025)
+	text(x = par('usr')[1]+23, y = .085, labels = expression(eta == 0), adj = 0)
+	text(x = par('usr')[1]+23, y = .05, labels = expression(eta == 1), adj = 0)
 	if(save==T){dev.off()}
-
 }
 
 getfig3c <- function(save=F){
-	if(save==T){jpeg(file='pasc_preds_exp_c.jpeg', width = 960, height = 960,
-	     pointsize = 36, quality = 100, bg = "white")
+	if(save==T){jpeg(file='pasc_preds_exp_c.jpeg', width = 5, height = 5, units='in', res=700)
 	}
 
 	par(mfrow=c(1,1))
+	getuplot2(outlist.eta,c(0,0.1),bquote('Outcomes for '~eta==0.55),col='black')
+	text(x=150,y=0.023,bquote(epsilon==1~', '~VE[T]==1))
+	text(x=100,y=0.035,bquote(epsilon==0~', '~VE[T]==0.55),srt=5)
+	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)		
+	axis(2,at=c(.0,.025,.05,.075,.1),labels=c(.0,.025,.05,.075,.1),las=2,pos=0)
+	getleggrad(20,20,-.025,-.025)
+	text(x = par('usr')[1]+25, y = .085, labels = expression(epsilon == 0), adj = 0)
+	text(x = par('usr')[1]+25, y = .05, labels = expression(epsilon == 1), adj = 0)
 
-	getuplot(outlist.eta,c(0,0.1),bquote('Outcomes for '~eta==0.55))
-	text(x=150,y=0.02,bquote(epsilon==1~', '~VE==1))
-	text(x=100,y=0.04,bquote(epsilon==0~', '~VE==0.55))
 	if(save==T){dev.off()}
 
 }
 
+getleggradcol <- function(xleftdiff,xrightdiff,ytopdiff,ybottomdiff,col){
+
+	n <- 100 #no. of gradient steps
+	colors = alpha(col,alpha=c(n:0)/n)
+
+	# Positioning for the legend
+	xleft <- par("usr")[1]+xleftdiff  # Left boundary of the plot
+	xright <- xleft + xrightdiff  # Width of the legend
+	ytop <- par("usr")[4]+ytopdiff  # Top boundary of the plot
+	ybottom <- ytop +ybottomdiff  # Height of the legend
+
+	# Draw the gradient
+	for (i in 1:n) {
+	  rect(xleft = xleft, ybottom = ybottom + (i-1)*(ytop-ybottom)/n, 
+	       xright = xright, ytop = ybottom + i*(ytop-ybottom)/n, 
+	       col = colors[i], border = NA)
+	}
+
+}
+
+
 getfig4 <- function(save=F){
-	if(save==T){jpeg(file='pasc_gamma_colors.jpeg', width = 960, height = 960,
-	     pointsize = 36, quality = 100, bg = "white")
+	if(save==T){jpeg(file='pasc_gamma_colors.jpeg', width = 4, height = 4, units='in', res=700)
 	}
 	
 	par(mfrow=c(1,1))
-	col1 = hcl.colors(n=2,palette='zissou 1')[1]
-	col2 = hcl.colors(n=2,palette='zissou 1')[2]
+	col1 = hcl.colors(n=3,palette='zissou 1')[1]
+	col2 = hcl.colors(n=3,palette='zissou 1')[3]
 
 	getuplot2(outlist.ve.gam2, c(0,.2),'' ,col=col1,axesvar=F)
 	adduplot(outlist.ve.gam.5,col=col2)
@@ -635,85 +667,124 @@ getfig4 <- function(save=F){
 	#text(x=100,y=0.15,bquote(1/gamma==0.5))
 	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)	
 	axis(2,at=c(0,.05,.10,.15,.20),labels=c(0,.05,.10,.15,.20),las=2,pos=0)
-	mtext('Time [weeks]',line=-20,outer=T)
+	mtext('Time [weeks]',line=-18,outer=T)
 	mtext('PASC Prevalence',las=3,line=-1.5,side=2,outer=T)
-	legend(x=10,y=.20,legend=c(bquote(gamma^{-1}~'=0.5 weeks'),bquote(gamma^{-1}~'=2 weeks')),
-		col=c(col1,col2),lty=1,lwd=4)
+	#legend(x=10,y=.20,legend=c(bquote(gamma^{-1}~'=0.5 weeks'),bquote(gamma^{-1}~'=2 weeks')),
+	#	col=c(col1,col2),lty=1,lwd=4)
+	getleggradcol(20,10,-.05,-.05,col1)
+	getleggradcol(30,10,-.05,-.05,col2)
+	text(x = par('usr')[1]+18, y = .1, labels = expression(eta == 0.55), adj = 0,cex=.5)
+	text(x = par('usr')[1]+22, y = .17, labels = expression(eta == 0), adj = 0,cex=.5)
+	text(x=150,y=0.1,labels = expression(gamma^{-1}==0.5~' weeks'),cex=0.5,col='black')
+	text(x=160,y=0.026,labels = expression(gamma^{-1}==2~' weeks'),cex=0.5,col='white')
+
 
 	if(save==T){dev.off()}
 }
 
-getfig5 <- function(save=F){
-	if(save==T){jpeg(file='pasc_vs_I.jpeg', width = 960, height = 960,
-	     pointsize = 36, quality = 100, bg = "white")
-	}
-	par(mfrow=c(1,1))
-	plot(aggregate(uend~I_active,idat,max),type='l',
-		xlab=bquote('Prevalence of Active Infections'),
-		ylab=bquote('PASC Prevalence'),
-		ylim=c(0,.16),las=1)
-	lines(aggregate(uend~I_active,idat,min))
-	text(x=.03,y=.13,bquote(eta==0~', '~epsilon==0.55))
-	text(x=.06,y=.05,bquote(eta==0.55~', '~epsilon==0))
-	if(save==T)(dev.off())
-}
 
 getfig5color <- function(save=F){
-	if(save==T){jpeg(file='pasc_Iactive_colors.jpeg', width = 960*1.5, height = 960*1.5,
-		     pointsize = 36, quality = 100, bg = "white")
-		}
+        if(save==T){jpeg(file='pasc_Iactive_colors.jpeg', width = 6, height = 6, units='in', res=700)
+                }
+        Iactive = Ivals
+        #manually make a color plot showing the scenario endpoints as Iactive changes
+        gamval=2
+        uold = dat[dat$gamma==gamval & dat$eta==etavals[1],'uexp']
+        cols=hcl.colors(n=3,palette='zissou 1')
+        grays = alpha(cols[1], alpha=rev(c((10:1)/10,1)))
 
-	Iactive = Ivals
-	#manually make a color plot showing the scenario endpoints as Iactive changes
-	gamval=2
-	uold = dat[dat$gamma==gamval & dat$eta==etavals[1],'uexp']
-	cols=hcl.colors(n=2,palette='zissou 1')
-	grays = alpha(cols[1], alpha=rev(c((10:1)/10,1)))
+        plot(Iactive,uold,ylim=c(0,0.3),type='l',lty='dotted', ylab='PASC Prevalence after Variant Replacement',
+                xlab='Prevalence of Active Infections before Variant Replacement',las=1)
+        for(i in 2:10){
+                unew = dat[dat$gamma==gamval & dat$eta==etavals[i],'uexp']
+                polygon(c(Iactive, rev(Iactive)), c(uold, rev(unew)), col=grays[i],border=grays[i])
+                uold=unew
+        }
+        #manually make a color plot showing the scenario endpoints as Iactive changes
+        gamval=1
+        uold = dat[dat$gamma==gamval & dat$eta==etavals[1],'uexp']
+        cols=hcl.colors(n=3,palette='zissou 1')
+        grays = alpha('black', alpha=rev(c((10:1)/10,1)))
 
-	plot(Iactive,uold,ylim=c(0,0.3),type='l',lty='dotted', ylab='PASC Prevalence after Variant Replacement',
-		xlab='Prevalence of Active Infections before Variant Replacement',las=1)
-	for(i in 2:10){
-		unew = dat[dat$gamma==gamval & dat$eta==etavals[i],'uexp']
-		polygon(c(Iactive, rev(Iactive)), c(uold, rev(unew)), col=grays[i],border=grays[i])
-		uold=unew
-	}
+        lines(Iactive,uold,ylim=c(0,0.3),lty='dotted')
+        for(i in 2:10){
+                unew = dat[dat$gamma==gamval & dat$eta==etavals[i],'uexp']
+                polygon(c(Iactive, rev(Iactive)), c(uold, rev(unew)), col=grays[i],border=grays[i])
+                uold=unew
+        }
+        #manually make a color plot showing the scenario endpoints as Iactive changes
+        gamval=0.5
+        uold = dat[dat$gamma==gamval & dat$eta==etavals[1],'uexp']
+        cols=hcl.colors(n=3,palette='zissou 1')
+        grays = alpha(cols[3], alpha=rev(c((10:1)/10,1)))
 
-	#manually make a color plot showing the scenario endpoints as Iactive changes
-	gamval=1
+        lines(Iactive,uold,ylim=c(0,0.3),lty='dotted')
+        for(i in 2:10){
+                unew = dat[dat$gamma==gamval & dat$eta==etavals[i],'uexp']
+                polygon(c(Iactive, rev(Iactive)), c(uold, rev(unew)), col=grays[i],border=grays[i])
+                uold=unew
+        }
+#       legend('bottomright',legend=c(bquote(gamma^{-1}~'=0.5 weeks'),
+#                               bquote(gamma^{-1}~'=1 week'),
+#                               bquote(gamma^{-1}~'=2 weeks')),
+#               col=c(cols[1],'black',cols[3]),lty=1,lwd=3)
+        n <- 30 #no. of gradient steps
+        colors = alpha(hcl.colors(3,'zissou 1')[1],alpha=c(n:0)/n)
 
-	uold = dat[dat$gamma==gamval & dat$eta==etavals[1],'uexp']
-	cols=hcl.colors(n=2,palette='zissou 1')
-	grays = alpha('black', alpha=rev(c((10:1)/10,1)))
+        # Positioning for the legend
+        xleft <- 0.005  # Left boundary of the plot
+        xright <- 0.007  # Width of the legend
+        ytop <- .27 # Top boundary of the plot
+        ybottom <- .2  # Height of the legend
 
-	lines(Iactive,uold,ylim=c(0,0.3),lty='dotted')
-	for(i in 2:10){
-		unew = dat[dat$gamma==gamval & dat$eta==etavals[i],'uexp']
-		polygon(c(Iactive, rev(Iactive)), c(uold, rev(unew)), col=grays[i],border=grays[i])
-		uold=unew
-	}
+        # Draw the gradient
+        for (i in 1:n) {
+          rect(xleft = xleft, ybottom = ybottom + (i-1)*(ytop-ybottom)/n,
+               xright = xright, ytop = ybottom + i*(ytop-ybottom)/n,
+               col = colors[i], border = NA)
+        }
+        colors = alpha('black',alpha=c(n:0)/n)
 
-	#manually make a color plot showing the scenario endpoints as Iactive changes
-	gamval=0.5
+        # Positioning for the legend
+        xleft <- 0.007  # Left boundary of the plot
+        xright <- 0.009  # Width of the legend
+        ytop <- .27 # Top boundary of the plot
+        ybottom <- .2  # Height of the legend
 
-	uold = dat[dat$gamma==gamval & dat$eta==etavals[1],'uexp']
-	cols=hcl.colors(n=2,palette='zissou 1')
-	grays = alpha(cols[2], alpha=rev(c((10:1)/10,1)))
+        # Draw the gradient
+        for (i in 1:n) {
+          rect(xleft = xleft, ybottom = ybottom + (i-1)*(ytop-ybottom)/n,
+               xright = xright, ytop = ybottom + i*(ytop-ybottom)/n,
+               col = colors[i], border = NA)
+        }
+        colors = alpha(hcl.colors(3,'zissou 1')[3],alpha=c(n:0)/n)
 
-	lines(Iactive,uold,ylim=c(0,0.3),lty='dotted')
-	for(i in 2:10){
-		unew = dat[dat$gamma==gamval & dat$eta==etavals[i],'uexp']
-		polygon(c(Iactive, rev(Iactive)), c(uold, rev(unew)), col=grays[i],border=grays[i])
-		uold=unew
-	}
-	legend('bottomright',legend=c(bquote(gamma^{-1}~'=0.5 weeks'),bquote(gamma^{-1}~'=1 week'),bquote(gamma^{-1}~'=2 weeks')),
-		col=c(cols[1],'black',cols[2]),lty=1,lwd=3)
+        # Positioning for the legend
+        xleft <- 0.009  # Left boundary of the plot
+        xright <- 0.011  # Width of the legend
+        ytop <- .27 # Top boundary of the plot
+        ybottom <- .2  # Height of the legend
 
-	if(save==T){dev.off()}
+        # Draw the gradient
+        for (i in 1:n) {
+          rect(xleft = xleft, ybottom = ybottom + (i-1)*(ytop-ybottom)/n,
+               xright = xright, ytop = ybottom + i*(ytop-ybottom)/n,
+               col = colors[i], border = NA)
+}
+        text(x = 0.006, y = .28, labels = expression(eta == 0), adj = 0,cex=.7)
+        text(x = 0.004, y = .19, labels = expression(eta == 0.55), adj = 0,cex=.7)
+        text(x=0.038,y=0.042,labels=expression(gamma^{-1}==2~' weeks'),adj=0,cex=1,col='white',srt=8)
+        text(x=0.025,y=0.07,labels=expression(gamma^{-1}==1~' weeks'),adj=0,cex=1,col='white',srt=15)
+        text(x=0.01,y=0.12,labels=expression(gamma^{-1}==0.5~' weeks'),adj=0,cex=1,col='black',srt=12)
+        if(save==T){dev.off()}
 }
 
+#getfig5color(save=T)
+
+
+
 getfig6 <- function(save=F){
-	if(save==T){jpeg(file='pasc_decline.jpeg', width = 960*2, height = 960,
-		     pointsize = 36, quality = 100, bg = "white") }
+	if(save==T){jpeg(file='pasc_decline.jpeg', width = 10, height = 5, units='in', res=700)}
 	par(mfrow=c(1,2))
 	plot(uexp~time,out.reduct,type='l',las=1,ylim=c(0,0.2),
 		ylab='PASC Prevalence',xlab='Time [weeks]',lwd=3)
@@ -875,59 +946,72 @@ getstencilfig2 <- function(save=F){
 
 	
 getstencilfig3 <- function(save=F){
-	if(save==T){jpeg(file='figure8_colors.jpeg', width = 960, height = 960,
-		     pointsize = 24, quality = 100, bg = "white") }
+	if(save==T){jpeg(file='figure8_colors.jpeg', width = 8, height = 8, units='in', res=700)}
 
 	# try doing these in a different order, so that gamma is changing within each window and keep the color scheme identical with the earlier figures
 	par(mfrow=c(3,3),mar=c(1,1,2,1),oma=c(5,5,1,1))	
 
-	getuplot2(outlist.stncl[[7]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[1,2],2))~' wk, '~q==.(stncl[1,1])),col=hcl.colors(n=2,palette='zissou 1')[1])  
+	getuplot2(outlist.stncl[[7]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[1,2],2))~' '~italic(F)==.(stncl[7,1])),col=hcl.colors(n=3,palette='zissou 1')[1])  
 	adduplot(outlist.stncl[[4]],col='black')
-	adduplot(outlist.stncl[[1]],col=hcl.colors(n=2,palette='zissou 1')[2])	
+	adduplot(outlist.stncl[[1]],col=hcl.colors(n=3,palette='zissou 1')[3])	
 	
 	axis(2,at=c(0,.05,.10,.15,.20),labels=c(0,.05,.10,.15,.20),las=2,pos=0)
-	legend('topright',legend=c(bquote(gamma^{-1}~'= 0.67 wks'),bquote(gamma^{-1}~'= 1 wk'),bquote(gamma^{-1}~'= 2 wks')),col=c(hcl.colors(2,palette='zissou 1')[1],'black',hcl.colors(2,palette='zissou 1')[2]),
+	legend('top',legend=c(bquote(gamma^{-1}~'= 0.67 wks'),
+				bquote(gamma^{-1}~'= 1 wk'),
+				bquote(gamma^{-1}~'= 2 wks')),
+			col=c(hcl.colors(3,palette='zissou 1')[1],'black',hcl.colors(3,palette='zissou 1')[3]),
 		lty=1,lwd=3)
 
-	getuplot2(outlist.stncl[[8]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[8,2],2))~' wk, '~q==.(stncl[i,1])),col=hcl.colors(n=2,palette='zissou 1')[1])  
+	getuplot2(outlist.stncl[[8]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[8,2],2))~' '~italic(F)==.(stncl[8,1])),col=hcl.colors(n=3,palette='zissou 1')[1])  
 	adduplot(outlist.stncl[[5]],col='black')
-	adduplot(outlist.stncl[[2]],col=hcl.colors(n=2,palette='zissou 1')[2])	
+	adduplot(outlist.stncl[[2]],col=hcl.colors(n=3,palette='zissou 1')[3])	
 
-	getuplot2(outlist.stncl[[9]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[9,2],2))~' wk, '~q==.(stncl[9,1])),col=hcl.colors(n=2,palette='zissou 1')[1])  
+	getuplot2(outlist.stncl[[9]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[9,2],2))~' '~italic(F)==.(stncl[9,1])),col=hcl.colors(n=3,palette='zissou 1')[1])  
 	adduplot(outlist.stncl[[6]],col='black')
-	adduplot(outlist.stncl[[3]],col=hcl.colors(n=2,palette='zissou 1')[2])	
+	adduplot(outlist.stncl[[3]],col=hcl.colors(n=3,palette='zissou 1')[3])	
 
-	getuplot2(outlist.stncl[[16]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[16,2],2))~' wk, '~q==.(stncl[16,1])),col=hcl.colors(n=2,palette='zissou 1')[1])  
+	getuplot2(outlist.stncl[[16]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[16,2],2))~' '~italic(F)==.(stncl[16,1])),col=hcl.colors(n=3,palette='zissou 1')[1])  
 	adduplot(outlist.stncl[[13]],col='black')
-	adduplot(outlist.stncl[[10]],col=hcl.colors(n=2,palette='zissou 1')[2])	
+	adduplot(outlist.stncl[[10]],col=hcl.colors(n=3,palette='zissou 1')[3])	
 	axis(2,at=c(0,.05,.10,.15,.20),labels=c(0,.05,.10,.15,.20),las=2,pos=0)
+	getleggradcol(20,10,-.05,-.1,hcl.colors(3,'zissou 1')[1])
+	getleggradcol(30,10,-.05,-.1,'black')
+	getleggradcol(40,10,-.05,-.1,hcl.colors(3,'zissou 1')[3])
+	text(x = par('usr')[1]+18, y = .05, labels = expression(eta == 0.55), adj = 0,cex=1)
+	text(x = par('usr')[1]+22, y = .17, labels = expression(eta == 0), adj = 0,cex=1)
 
-	getuplot2(outlist.stncl[[17]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[17,2],2))~' wk, '~q==.(stncl[17,1])),col=hcl.colors(n=2,palette='zissou 1')[1])  
+	getuplot2(outlist.stncl[[17]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[17,2],2))~' '~italic(F)==.(stncl[17,1])),col=hcl.colors(n=3,palette='zissou 1')[1])  
 	adduplot(outlist.stncl[[14]],col='black')
-	adduplot(outlist.stncl[[11]],col=hcl.colors(n=2,palette='zissou 1')[2])	
+	adduplot(outlist.stncl[[11]],col=hcl.colors(n=3,palette='zissou 1')[3])	
+	text(x=140,y=0.08,labels=expression(gamma^{-1}==0.67~' wks'))
+	text(x=110,y=0.04,labels=expression(gamma^{-1}==1~' wk'),col='white')
+	text(x=150,y=0.025,labels=expression(gamma^{-1}==2~' wks'),col='black')
 
-	getuplot2(outlist.stncl[[18]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[18,2],2))~' wk, '~q==.(stncl[18,1])),col=hcl.colors(n=2,palette='zissou 1')[1])  
+	getuplot2(outlist.stncl[[18]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[18,2],2))~' '~italic(F)==.(stncl[18,1])),col=hcl.colors(n=3,palette='zissou 1')[1])  
 	adduplot(outlist.stncl[[15]],col='black')
-	adduplot(outlist.stncl[[12]],col=hcl.colors(n=2,palette='zissou 1')[2])	
+	adduplot(outlist.stncl[[12]],col=hcl.colors(n=3,palette='zissou 1')[3])	
 
-	getuplot2(outlist.stncl[[25]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[25,2],2))~' wk, '~q==.(stncl[25,1])),col=hcl.colors(n=2,palette='zissou 1')[1])  
+
+	getuplot2(outlist.stncl[[25]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[25,2],2))~' '~italic(F)==.(stncl[25,1])),col=hcl.colors(n=3,palette='zissou 1')[1])  
 	adduplot(outlist.stncl[[22]],col='black')
-	adduplot(outlist.stncl[[19]],col=hcl.colors(n=2,palette='zissou 1')[2])	
+	adduplot(outlist.stncl[[19]],col=hcl.colors(n=3,palette='zissou 1')[3])	
 	axis(2,at=c(0,.05,.10,.15,.20),labels=c(0,.05,.10,.15,.20),las=2,pos=0)
 	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)
 
-	getuplot2(outlist.stncl[[26]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[26,2],2))~' wk, '~q==.(stncl[26,1])),col=hcl.colors(n=2,palette='zissou 1')[1])  
+	getuplot2(outlist.stncl[[26]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[26,2],2))~' '~italic(F)==.(stncl[26,1])),col=hcl.colors(n=3,palette='zissou 1')[1])  
 	adduplot(outlist.stncl[[23]],col='black')
-	adduplot(outlist.stncl[[20]],col=hcl.colors(n=2,palette='zissou 1')[2])	
+	adduplot(outlist.stncl[[20]],col=hcl.colors(n=3,palette='zissou 1')[3])	
 	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)
 
-	getuplot2(outlist.stncl[[27]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[27,2],2))~' wk, '~q==.(stncl[27,1])),col=hcl.colors(n=2,palette='zissou 1')[1])  
+	getuplot2(outlist.stncl[[27]],ylims=c(0,0.2),main=bquote(I==~.(round(stncl[27,2],2))~' '~italic(F)==.(stncl[27,1])),col=hcl.colors(n=3,palette='zissou 1')[1])  
 	adduplot(outlist.stncl[[24]],col='black')
-	adduplot(outlist.stncl[[21]],col=hcl.colors(n=2,palette='zissou 1')[2])	
+	adduplot(outlist.stncl[[21]],col=hcl.colors(n=3,palette='zissou 1')[3])	
 	axis(1,at=c(0,50,100,150,200),labels=c(0,50,100,150,200),las=1,pos=0)	
-	mtext('Time [weeks]',line=-48,outer=T)
+	mtext('Time [weeks]',line=-58,outer=T)
 	mtext('PASC Prevalence',las=3,line=3,side=2,outer=T)
 
 	if(save==T){dev.off()}
 
-}	
+}
+#getstencilfig3(save=T)
+	
