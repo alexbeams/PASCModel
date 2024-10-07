@@ -8,7 +8,7 @@ rm(list=ls()) #clears the working directory to start from a clean slate each tim
 
 
 
-getOut <- function(Tau,a.duration,L,a.latent,VE,fr,I_active){
+getOut <- function(Tau,a.duration,L,a.latent,VE,fr,I_active,delta){
 
 	# This function outputs the SIP ODE solution, and PASC prevalence
 	# ODE is either SIP or immune escape model
@@ -35,10 +35,10 @@ getOut <- function(Tau,a.duration,L,a.latent,VE,fr,I_active){
 	deltabeta=0.0,          # change in transmisison rate, [1/population density/week]
 	sw = .4,                # selection coefficient
 	gamma   = 1,            # recovery rate, [1/week]
-	delta   = 1/30,        # rate of adaptive immune loss, [1/week]
+	delta   = delta,        # rate of adaptive immune loss, [1/week]
 	#eta     = .95,         # immune efficacy against infection, [dimensionless]
 	deltaeta = 0.0,	        # change in immune efficacy, [dimensionless]
-	alpha   = 1/50,         # per-capita vaccination rate, [1/week]
+	alpha   = 1/52,         # per-capita vaccination rate, [1/week]
 	tau     = Tau,           #mean duration of long Covid, [week]
 	phi     = 0,         #probability of developing long Covid from S0, [dimensionless]
 	epsilon  = 0,           #efficacy against PASC conditional on breakthrough infection (in immunized people), [dimensionless]
@@ -115,7 +115,7 @@ getOut <- function(Tau,a.duration,L,a.latent,VE,fr,I_active){
 	#############
 
 	tEnd <-2000		
-	DT <- 1/2			#temporal resolution for solver; can be rather coarse
+	DT <- 1/2		#temporal resolution for solver; can be rather coarse
 
 	##########################
 	# differential equations #
@@ -232,46 +232,96 @@ getOut <- function(Tau,a.duration,L,a.latent,VE,fr,I_active){
 }
 
 
-crud = getOut(50,6,10,10,.55,1/200,.02)
-densvals=crud$densvals
-densvals.exp=crud$densvals.exp
-latvals=crud$latvals
-tvals=crud$tvals
-out=crud$out
-out = out[out$time > 2000 & out$time < 2200,]
-out$time = out$time - 2000
+run1 = getOut(52,6,20,20,.55,1/200,.018,1/52)
+densvals1=run1$densvals
+densvals.exp1=run1$densvals.exp
+latvals1=run1$latvals
+tvals1=run1$tvals
+out1=run1$out
+out1 = out1[out1$time > 2000 & out1$time < 2200,]
+out1$time = out1$time - 2000
+
+run2 = getOut(52,6,20,2,.55,1/200,.018,1/52)
+densvals2=run2$densvals
+densvals.exp2=run2$densvals.exp
+latvals2=run2$latvals
+tvals2=run2$tvals
+out2=run2$out
+out2 = out2[out2$time > 2000 & out2$time < 2200,]
+out2$time = out2$time - 2000
+
+run3 = getOut(52,6,20,20,.55,1/200,.018,1/26)
+densvals3=run3$densvals
+densvals.exp3=run3$densvals.exp
+latvals3=run3$latvals
+tvals3=run3$tvals
+out3=run3$out
+out3 = out3[out3$time > 2000 & out3$time < 2200,]
+out3$time = out3$time - 2000
+
+run4 = getOut(52,6,20,2,.55,1/200,.018,1/26)
+densvals4=run4$densvals
+densvals.exp4=run4$densvals.exp
+latvals4=run4$latvals
+tvals4=run4$tvals
+out4=run4$out
+out4 = out4[out4$time > 2000 & out4$time < 2200,]
+out4$time = out4$time - 2000
+
 
 #creates Fig. 7 in the manuscript
 
 getPlot <- function(save=F){
 
-	if(save==T){jpeg(file='immescape.jpeg', width = 960, height = 960,
-	     pointsize = 24, quality = 100, bg = "white")}
+	if(save==T){jpeg(file='immescape_edit.jpeg', width =10, height = 10, units='in', res=700)}
 
 	par(mfrow=c(2,2),mar=c(5,5,4,2))
-	plot(u ~ time,out, 
+	plot(u ~ time,out1, 
 		type='l',xlab='Time [weeks]',ylab='',main='PASC',
-		ylim=c(0,.01),las=1)
+		ylim=c(-0.001,.01),las=1,col='black',lwd=2)
 	title(ylab='Prevalence', line=3.5,cex.lab=1.2)
-	lines( u_exp ~ time,out,lty='dotted')
+	lines( u_exp ~ time,out1,lty='dotted',col='black',lwd=2)
+	lines(u ~ time,out2,col='dodgerblue3',lwd=2) 
+	lines(u ~ time,out3,col='red2',lwd=2)
+	lines(u ~ time,out4,col='purple2',lwd=2)
+	lines( u_exp ~ time,out4,lty='dotted',col='red2',lwd=2)
+	legend('topleft',legend=c(
+		'Baseline Latency + 12 mo. Immunity + Gamma PASC',
+		'Baseline Latency + 6 mo. immunity + Gamma PASC',
+		'High-var. latency + 12 mo. Immunity + Gamma PASC',
+		'High-var. latency + 6 mo. Immunity + Gamma PASC'),
+		col=c('black','red2','dodgerblue3','mediumorchid3'),lty=1,lwd=2,bty='n')
+	legend('bottomright',legend=c(
+		'No Latency + 12 mo. Immunity + Exp. PASC',
+		'No Latency + 6 mo. immunity + Exp. PASC'),
+		col=c('black','red2'),lty=2,lwd=2,bty='n')
 
-	plot((I1+I2)~time,out,type='l',
+	plot((I1+I2)~time,out1,type='l',
 		ylab='',xlab='Time [weeks]',main='Active Infections',
-		ylim=c(0,.1),las=1)
-	abline(h=0,lty='dotted')
-	title(ylab='Prevalence', line=3.5,cex.lab=1.2)
+		ylim=c(0,.08),las=1,col='black',lwd=3)
+	title(ylab='Prevalence', line=3.5,cex.lab=1.2,lwd=2)
+	lines((I1+I2)~time,out3,col='red2',lwd=2)
+	legend('topright',legend=c('12 mo. immunity','6 mo. immunity'),
+		col=c('black','red2'),lty=1,lwd=2,bty='n')
 
-	plot(tvals,densvals,type='l',xlim=c(0,100),
-		main='PASC duration',xlab='Duration [weeks]',ylab='',las=1)
-	lines(tvals,densvals.exp,lty='dotted')
+	plot(tvals1,densvals1,type='l',xlim=c(0,100),
+		main='PASC duration',xlab='Duration [weeks]',ylab='',las=1,col='black',lwd=2)
+	lines(tvals1,densvals.exp1,lty='dotted',col='black',lwd=2)
 	title(ylab='Prob. density', line=3.5,cex.lab=1.2)
+	legend('topright',legend=c('Gamma','Exponential'),col='black',
+		lty=c(1,2),lwd=2,bty='n')
 
-	plot(tvals,latvals,type='l',xlim=c(0,30),
+
+	plot(tvals1,latvals1,type='l',xlim=c(0,30),
 		main='PASC latency', xlab='Latency [weeks]',
-		ylab='',las=1)
-	title(ylab='Prob. density', line=3.5,cex.lab=1.2)
-
+		ylab='',las=1,col='black',lwd=2)
+	title(ylab='Prob. density', line=3.5,cex.lab=1.2,lwd=2)
+	lines(tvals2,latvals2,col='dodgerblue3',lwd=2)
+	legend('topleft',legend=c('Baseline','High-var. latency'),
+		col=c('black','dodgerblue3'),lty=1,lwd=2,bty='n')
 
 	if(save==T){dev.off()}
 }
+getPlot(save=T)
+
 

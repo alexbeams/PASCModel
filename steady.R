@@ -63,7 +63,7 @@ SFracvals <- sapply(etavals, function(x) getSFrac(x,J,alpha,gamma,delta)  )
 SIncFracvals <- sapply(etavals, function(x) getSIncFrac(x,J,alpha,gamma,delta)  )
 
 
-jpeg(file='steady_state_heterogeneity.jpeg',quality=100,height=960,width=960,pointsize=24,bg='white')
+pdf(file='steady_state_heterogeneity.pdf',height=5,width=5)
 par(mfrow=c(2,2),mar=c(5,6,4,1))
 
 plot(etavals,betavals,type='l',xlab=bquote('Primary efficacy ('~eta~')'),
@@ -98,35 +98,35 @@ SIncFracvals2 <- sapply(etavals, function(x) getSIncFrac(x,J,alpha,gamma,delta) 
 
 cols = hcl.colors(n=2,palette='zissou 1')
 
-jpeg(file='steady_state_heterogeneity_colors.jpeg',quality=100,height=960,width=960,pointsize=24,bg='white')
+jpeg(file='steady_state_heterogeneity_colors.jpeg',height=7,width=7, units='in', res=700)
 par(mfrow=c(2,2),mar=c(5,6,4,1))
 
 plot(etavals,betavals/1,type='l',xlab=bquote('Primary efficacy ('~eta~')'),
 	ylab=bquote('Reproduction number ('~R[0]~')'),lwd=2,
 	xlim=c(0,VE_T),ylim=c(0,5),las=1)
-lines(etavals,betavals.5/.5,col=cols[2],lwd=2)
-lines(etavals,betavals2/2,col=cols[1],lwd=2)
+lines(etavals,betavals.5/.5,col=cols[2],lwd=2,lty=2)
+lines(etavals,betavals2/2,col=cols[1],lwd=2,lty=3)
 legend('topleft',legend=c(bquote(gamma^{-1}~'=0.5 weeks'),bquote(gamma^{-1}~'=1 week'),bquote(gamma^{-1}~'=2 weeks')),
-	col=c(cols[1],'black',cols[2]),lwd=2)
+	col=c(cols[1],'black',cols[2]),lwd=2,lty=c(3,1,2))
 
 plot(etavals,phivals,type='l',xlab=bquote('Primary efficacy ('~eta~')'),
 	ylab=bquote('Baseline PASC probability ('~phi~')'),lwd=2,
 	xlim=c(0,VE_T),ylim=c(0,0.15),las=1)
-lines(etavals,phivals.5,col=cols[2],lwd=2)
-lines(etavals,phivals2,col=cols[1],lwd=2)
+lines(etavals,phivals.5,col=cols[2],lwd=2,lty=2)
+lines(etavals,phivals2,col=cols[1],lwd=2,lty=3)
 
 
 plot(etavals,SFracvals,type='l',xlab=bquote('Primary efficacy ('~eta~')'),
 	ylab=bquote('P(Susceptible | Uninfected)'),lwd=2,
 	xlim=c(0,VE_T),ylim=c(0.1,0.4),las=1)
-lines(etavals,SFracvals.5,col=cols[2],lwd=2)
-lines(etavals,SFracvals2,col=cols[1],lwd=2)
+lines(etavals,SFracvals.5,col=cols[2],lwd=2,lty=2)
+lines(etavals,SFracvals2,col=cols[1],lwd=2,lty=3)
 
 
 plot(etavals,SIncFracvals,type='l',xlab=bquote('Primary efficacy ('~eta~')'),
 	ylab=bquote(atop('Proportion of New Infections ','from Susceptibles')),lwd=2,
 	xlim=c(0,VE_T),ylim=c(0.25,0.7),las=1)
-lines(etavals,SIncFracvals.5,col=cols[2],lwd=2)
-lines(etavals,SIncFracvals2,col=cols[1],lwd=2)
+lines(etavals,SIncFracvals.5,col=cols[2],lwd=2,lty=2)
+lines(etavals,SIncFracvals2,col=cols[1],lwd=2,lty=3)
 
 dev.off()
